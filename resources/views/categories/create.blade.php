@@ -19,7 +19,7 @@
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Dictumst amet, metus, sit massa posuere maecenas. At tellus ut nunc amet vel egestas.</p>
               </div>
               <div class="col-md-6 p-5">
-                <form action='{{route("categries.store")}}' method="POST" enctype='multipart/form-data'>
+                <form action='{{route("categories.store")}}' method="POST" enctype='multipart/form-data'>
                 @csrf() 
                 <div class="mb-3">
                     <label for="name" class="form-label">Name</label>
