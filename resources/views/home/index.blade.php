@@ -19,7 +19,7 @@
             <span class="badge bg-primary rounded-pill">3</span>
           </h4>
           <ul class="list-group mb-3">
-          
+          dd($users);
           @foreach($selectedProductsIDs as $selectedID)
             @foreach($selectedProducts as $product)
             @if($selectedID == $product->id)
@@ -38,8 +38,8 @@
               <strong>$20</strong>
             </li>
           </ul>
-  
-          <a href='{{route("home.checkout")}}' class="w-100 btn btn-primary btn-lg" type="submit">Continue to checkout</a>
+            
+          <a href='{{ route("home.checkout") }}' class="w-100 btn btn-primary btn-lg" type="submit">Continue to checkout</a>
         </div>
       </div>
     </div>

@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Models\Category;
 use App\Models\Order;
 use App\Models\Cart;
+use App\Models\User;
 
 use App\Mail\MailableOrder;
 use Illuminate\Support\Facades\Mail;
@@ -16,9 +17,11 @@ class HomeController extends Controller
 {
     //
     public function index(Request $request){
-  
+        $users= User::all();
+
        
         $products= Product::all();
+        
         $keyword = $request->input("search");
         if(empty($request->input("search"))){
             $categories = Category::all();
@@ -33,6 +36,7 @@ class HomeController extends Controller
        $selectedProductsIDs =json_decode($request->session()->get('cart', '[]'));
        $selectedProducts = Product::whereIn('id', $selectedProductsIDs)->get();
         return view("home.index",[
+            "users"=>$users,
             "products"=>$products ,
             "categories"=>$categories,
             "selectedProductsIDs"=>$selectedProductsIDs,
@@ -42,14 +46,16 @@ class HomeController extends Controller
     
     public function addToCart(Request $request,$id){
         $oldListOfProducts =$request->session()->get('cart', '[]');
-
+        
         $listOfProducts = json_decode($oldListOfProducts);
         array_push($listOfProducts, $id);
         $request->session()->put('cart', json_encode($listOfProducts));
         return redirect()->route("home.index");
     }
     public function checkout(Request $request){
+   
         $selectedProductsIDs =json_decode($request->session()->get('cart', '[]'));
+       // $user_id= User::all();
         // creation de la commande
         $newOrder = new Order();
         $newOrder->no = 10;
@@ -65,7 +71,7 @@ class HomeController extends Controller
         }
         $request->session()->forget('cart');
         // change this eail with the email of authenticated user
-        Mail::to('wladderb22@gmail.com')->send(new MailableOrder("Sami",$newOrder->amount ,count($selectedProductsIDs) ));
+        Mail::to('beddine330@gmail.com')->send(new MailableOrder("Sami",$newOrder->amount ,count($selectedProductsIDs) ));
         return redirect()->route("home.index");
     }
 }
