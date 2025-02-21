@@ -7,6 +7,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\LanguageController;
 
 // Authentication Routes
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -23,12 +24,14 @@ Route::post('/forgot-password', [AuthController::class, 'sendResetLinkEmail'])->
 Route::get('/reset-password/{token}', [AuthController::class, 'showResetForm'])->name('password.reset');
 Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('password.update');
 
-
 // Protected Routes (Require Authentication)
-Route::middleware('auth.custom')->group(function () {
+Route::middleware(['auth.custom','ChangeLang'])->group(function () {
+    // Public Routes (Accessible by anyone)
+    Route::get('/', [HomeController::class, 'index'])->name('home.index');
+    
+    // Language switch route
+    Route::get('/change-lang/{lang}', [LanguageController::class, 'changeLang'])->name('changeLang');
 
-// Public Routes (Accessible by anyone)
-Route::get('/', [HomeController::class, 'index'])->name('home.index');
     // Administrative Routes (Only for Admins)
     Route::resource('categories', CategoryController::class)->names('categories'); // CRUD for Categories
     Route::resource('products', ProductController::class)->names('products'); // CRUD for Products

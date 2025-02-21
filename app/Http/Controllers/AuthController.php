@@ -8,6 +8,9 @@ use App\Models\User;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\ThrottleRequests;
+use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
@@ -22,7 +25,7 @@ class AuthController extends Controller
     {
         $request->validate([
             'email' => 'required|email',
-            'password' => 'required',
+            'password' => 'required',// Add Google reCAPTCHA validation
         ]);
 
         $user = User::where('email', $request->email)->first();
@@ -51,7 +54,10 @@ class AuthController extends Controller
     // Send password reset link
     public function sendResetLinkEmail(Request $request)
     {
-        $request->validate(['email' => 'required|email']);
+        $request->validate([
+            'email' => 'required|email',
+            'g-recaptcha-response' => 'required|captcha', // Add Google reCAPTCHA validation
+        ]);
 
         $status = Password::sendResetLink(
             $request->only('email')
@@ -74,7 +80,9 @@ class AuthController extends Controller
         $request->validate([
             'token' => 'required',
             'email' => 'required|email',
-            'password' => 'required|min:6|confirmed',
+            'password' => 'required|min:4|confirmed|different:email', // Ensure password is different from email
+            'password_confirmation' => 'required',
+            'g-recaptcha-response' => 'required|captcha', // Add Google reCAPTCHA validation
         ]);
 
         $status = Password::reset(

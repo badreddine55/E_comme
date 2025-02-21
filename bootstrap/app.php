@@ -14,6 +14,7 @@ return Application::configure(basePath: dirname(__DIR__))
         // Register your custom middleware here
         $middleware->alias([
             'auth.custom' => \App\Http\Middleware\AuthenticateCustom::class,
+            'ChangeLang' => \App\Http\Middleware\ChangeLang::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

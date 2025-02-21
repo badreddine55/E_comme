@@ -9,13 +9,6 @@ use App\Models\User;
 
 class AuthenticateCustom
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response)  $next
-     * @return \Illuminate\Http\Response
-     */
     public function handle($request, Closure $next)
     {
         // Check if the user_id exists in the session
